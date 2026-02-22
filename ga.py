@@ -85,7 +85,7 @@ class ga:
             filho[i:j+1] = filho[i:j+1][::-1]
         return filho
 
-    def run(self, pop_inicial=None):
+    def run(self, pop_inicial=None, snapshots_em=None):
 
         if pop_inicial is None:
             pop = [random.sample(range(self.num_cidades), self.num_cidades)
@@ -97,6 +97,8 @@ class ga:
         melhor_geral = None
         melhor_fit_geral = float('inf')
         historico = []
+        snapshots = {}
+        snap_set = set(snapshots_em) if snapshots_em else set()
 
         for generation in range(self.num_geracoes):
             # calcula pesos
@@ -109,6 +111,10 @@ class ga:
                 melhor_geral = list(pop[min_idx])
             
             historico.append(melhor_fit_geral)
+
+            # salva snapshot se solicitado
+            if generation in snap_set:
+                snapshots[generation] = (list(melhor_geral), melhor_fit_geral)
 
             # ordena a população pelo fitness (qnt menor melhor)
             pop_ordenada = [x for _, x in sorted(zip(fit_vals, pop), key=lambda pair: pair[0])]
@@ -123,4 +129,4 @@ class ga:
 
             pop = pop2
 
-        return melhor_geral, melhor_fit_geral, historico
+        return melhor_geral, melhor_fit_geral, historico, snapshots
