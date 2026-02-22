@@ -62,28 +62,15 @@ class ga:
         n = len(parent1)
         c = random.randint(1, n - 1)   # ponto de corte entre 1 e n-1
 
-        # prefixo de parent1 ate c + sufixo de parent2 de c+1 em diante
-        aux_filho = parent1[:c] + parent2[c:]
-
-        # tira duplicatas e insere cidades faltantes, crossover de um ponto n preserva permutações
-        faltantes = list(set(parent1) - set(aux_filho))
+        # SUBSTRING(parent1, 1, c)
+        filho = parent1[:c]
         
-        # se não houver duplicatas, nem passa
-        if not faltantes:
-            return aux_filho
-
-        # substitui duplicatas pelas cidades faltantes
-        check = set()
-        filho = []
-        for cidade in aux_filho:
-            if cidade not in check:
-                check.add(cidade)
+        # SUBSTRING(parent2, c, n) + início, filtrando duplicatas
+        # garante que o filho tenha todos os genes sem repetir os de parent1[:c]
+        set_filho = set(filho)
+        for cidade in parent2:
+            if cidade not in set_filho:
                 filho.append(cidade)
-            else:
-                # se a cidade é repetida, pega uma das q faltam
-                nova_cidade = faltantes.pop()
-                check.add(nova_cidade)
-                filho.append(nova_cidade)
         
         return filho
 
