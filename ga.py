@@ -24,7 +24,7 @@ class ga:
             return APPEND(SUBSTRING(parent1,1,c), SUBSTRING(parent2,c+1,n))
     """
 
-    def __init__(self, matriz_distancias, tam_pop=100, prob_mutacao=0.01, num_geracoes=100):
+    def __init__(self, matriz_distancias, tam_pop=100, prob_mutacao=0.01, num_geracoes=100, elite_size=2):
         """
             matriz_distancias: matriz de distâncias
             tam_pop: tamanho da população
@@ -36,14 +36,14 @@ class ga:
         self.tam_pop = tam_pop
         self.prob_mutacao = prob_mutacao
         self.num_geracoes = num_geracoes
+        self.elite_size = elite_size
 
-    def _fitness(self, pop):
+    def _fitness(self, ind):
         # calcula o fitness (dist total), quanto menor melhor
-        dist = 0
-        for i in range(self.num_cidades - 1):
-            dist += self.matriz_distancias[pop[i], pop[i+1]]
-        dist += self.matriz_distancias[pop[-1], pop[0]]   # volta p/ cidade inicial
-        return dist
+        # cria uma lista de idx para pegar a distância entre as cidades i e i+1
+        idx_origem = ind
+        idx_destino = np.roll(ind, -1) # volta à primeira cidade
+        return np.sum(self.matriz_distancias[idx_origem, idx_destino])
 
     def weighted_by(self, population):
         # Fitness Proportionate Selection
@@ -51,7 +51,7 @@ class ga:
         fit_val = [self._fitness(ind) for ind in population]
         # menor distância -> maior peso
         weights = [1.0 / (f + 1e-10) for f in fit_val]   # o 1e-10 faz com q evita divisão por zero
-        return weights
+        return weights, fit_val
 
     def reproduce(self, parent1, parent2):
         """
@@ -66,7 +66,13 @@ class ga:
         aux_filho = parent1[:c] + parent2[c:]
 
         # tira duplicatas e insere cidades faltantes, crossover de um ponto n preserva permutações
-        faltante = set(parent1) - set(aux_filho)
+        faltantes = list(set(parent1) - set(aux_filho))
+        
+        # se não houver duplicatas, nem passa
+        if not faltantes:
+            return aux_filho
+
+        # substitui duplicatas pelas cidades faltantes
         check = set()
         filho = []
         for cidade in aux_filho:
@@ -74,13 +80,11 @@ class ga:
                 check.add(cidade)
                 filho.append(cidade)
             else:
-                # caso de cidade repetida, substitui pela primeira cidade faltante
-                cidade = faltante.pop()
-                check.add(cidade)
-                filho.append(cidade)
-        # se faltar cidades, inseriinserendo no final
-        if faltante:
-            filho.extend(faltante)
+                # se a cidade é repetida, pega uma das q faltam
+                nova_cidade = faltantes.pop()
+                check.add(nova_cidade)
+                filho.append(nova_cidade)
+        
         return filho
 
     def mutate(self, filho):
@@ -109,34 +113,27 @@ class ga:
 
         for generation in range(self.num_geracoes):
             # calcula pesos
-            weights = self.weighted_by(pop)
+            weights, fit_vals = self.weighted_by(pop)
 
-            # cria nova pop vazia
-            pop2 = []
+            # encontra o melhor da geração atual
+            min_idx = np.argmin(fit_vals)
+            if fit_vals[min_idx] < melhor_fit_geral:
+                melhor_fit_geral = fit_vals[min_idx]
+                melhor_geral = list(pop[min_idx])
+            
+            historico.append(melhor_fit_geral)
 
-            # gera cada filho individualmente
-            for i in range(self.tam_pop):
-                # seleciona dois pais com base nos pesos
+            # ordena a população pelo fitness (qnt menor melhor)
+            pop_ordenada = [x for _, x in sorted(zip(fit_vals, pop), key=lambda pair: pair[0])]
+            pop2 = pop_ordenada[:self.elite_size]
+
+            # reprod
+            while len(pop2) < self.tam_pop:
                 parent1, parent2 = random.choices(pop, weights=weights, k=2)
-
-                # crossover
                 filho = self.reproduce(parent1, parent2)
-
-                # mutacao
                 filho = self.mutate(filho)
-
-                # add filho a nova pop
                 pop2.append(filho)
 
-            # substitui população antiga pela nova
             pop = pop2
-
-            # armazena o melhor indivíduo da geração
-            melhor_na_geracao = min(pop, key=lambda ind: self._fitness(ind))
-            melhor_fit = self._fitness(melhor_na_geracao)
-            historico.append(melhor_fit)
-            if melhor_fit < melhor_fit_geral:
-                melhor_fit_geral = melhor_fit
-                melhor_geral = melhor_na_geracao.copy()
 
         return melhor_geral, melhor_fit_geral, historico
