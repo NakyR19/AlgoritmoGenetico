@@ -1,10 +1,24 @@
+---
+title: TSP
+emoji: 🚀
+colorFrom: red
+colorTo: red
+sdk: docker
+app_port: 8501
+tags:
+- streamlit
+pinned: false
+short_description: Algoritmo genético para resolução do problema do TSP
+---
+
 # 🧬 Algoritmo Genético — Caixeiro Viajante (TSP)
 
 Implementação de um **Algoritmo Genético** para resolver o **Problema do Caixeiro Viajante** (Travelling Salesman Problem), com dashboard interativo em Streamlit.
 
 > Projeto da **Unidade III** da disciplina de Inteligência Artificial.
 
-## Participantes:
+## Participantes
+
 LUAN ALMEIDA VALENÇA  
 LUIZ FELIPE TOJAL GOMES CORUMBA  
 RAFAEL MACHADO COSTA MENESES  
