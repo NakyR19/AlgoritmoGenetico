@@ -17,6 +17,14 @@ Implementação de um **Algoritmo Genético** para resolver o **Problema do Caix
 
 > Projeto da **Unidade III** da disciplina de Inteligência Artificial.
 
+---
+
+## Página no HugginFace:
+
+https://huggingface.co/spaces/NakyR19/TSP
+
+---
+
 ## Participantes
 
 LUAN ALMEIDA VALENÇA  
@@ -28,10 +36,26 @@ RAFAEL SANTOS SILVA
 
 ## Estrutura do Projeto
 
-| Arquivo | Descrição |
-|---------|-----------|
-| `ga.py` | Classe `ga` com a implementação do algoritmo genético |
-| `main.py` | Dashboard Streamlit para visualização e execução interativa |
+```
+ia_unidadeIII/
+├── src/
+│   ├── ga.py                # Classe ga — implementação do algoritmo genético
+│   └── streamlit_app.py     # Dashboard Streamlit para visualização e execução
+├── docs/
+│   └── Relatório_IA_GA.pdf  # Relatório acadêmico do projeto
+├── Dockerfile               # Configuração do container Docker (deploy HuggingFace)
+├── requirements.txt         # Dependências do projeto
+├── .gitignore               # Regras de ignore do Git
+└── README.md                # Documentação do projeto
+```
+
+| Arquivo / Diretório | Descrição |
+|----------------------|-----------|
+| `src/ga.py` | Classe `ga` com toda a lógica do algoritmo genético (fitness, seleção, cruzamento, mutação e elitismo) |
+| `src/streamlit_app.py` | Dashboard Streamlit com controles interativos e 5 abas de visualização |
+| `docs/` | Relatório acadêmico em PDF |
+| `Dockerfile` | Imagem Docker usada para deploy no HuggingFace Spaces |
+| `requirements.txt` | Lista de dependências Python (`numpy`, `streamlit`, `plotly`, `pandas`) |
 
 ## Como o Algoritmo Funciona
 
