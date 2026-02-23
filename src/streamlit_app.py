@@ -8,7 +8,7 @@ import numpy as np
 import streamlit as st
 import plotly.graph_objects as go
 
-from src.ga import ga
+from ga import ga
 
 # configuração da página
 st.set_page_config(
