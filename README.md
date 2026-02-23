@@ -4,6 +4,12 @@ Implementação de um **Algoritmo Genético** para resolver o **Problema do Caix
 
 > Projeto da **Unidade III** da disciplina de Inteligência Artificial.
 
+## Participantes:
+LUAN ALMEIDA VALENÇA
+LUIZ FELIPE TOJAL GOMES CORUMBA
+RAFAEL MACHADO COSTA MENESES
+RAFAEL SANTOS SILVA
+
 ---
 
 ## Estrutura do Projeto
