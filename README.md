@@ -115,7 +115,7 @@ pip install numpy streamlit plotly pandas
 ### 2. Rodar o dashboard
 
 ```bash
-streamlit run main.py
+streamlit run streamlit_app.py
 ```
 
 O dashboard abrirá automaticamente no navegador. Ajuste os parâmetros na barra lateral e clique em **Executar**.
