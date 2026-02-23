@@ -1,14 +1,14 @@
 ---
-title: Streamlit Template Space
+title: TSP
 emoji: 🚀
 colorFrom: red
 colorTo: red
 sdk: docker
 app_port: 8501
 tags:
-  - streamlit
+- streamlit
 pinned: false
-short_description: Streamlit template space
+short_description: Algoritmo genético para resolução do problema do TSP
 ---
 
 # Welcome to Streamlit!
